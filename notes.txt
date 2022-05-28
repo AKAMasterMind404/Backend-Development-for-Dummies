@@ -1,0 +1,119 @@
+3. 
+
+    Sending a basic response:
+
+        const http = require('http') // Instance of http
+
+        const server = http.createServer((req,res)=>{
+            console.log('Server received something!');
+        });
+
+        server.listen(3000, 'localhost');
+
+    With this, make a requst to the following url:
+
+        localhost:3000/
+
+    This will print: 'Server received something!'
+
+    To send text, do the following:
+    Under the createServer method write:
+
+        res.setHeader('Content-Type', 'text/plain');
+        // TO SPECIFY THE TYPE OF DATA
+
+        res.write('Hello');
+
+        res.end();
+
+    Alternatively, to send html:
+
+        res.setHeader('Content-Type','text/html');
+        res.write('<h1>Hello</h1>');
+        res.end()
+
+    To load a website:
+
+        const fs = require('fs')
+
+        .
+        .
+
+        fs.readFile('.<relative-path-project>', err, data)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.write(data);
+                res.end();
+            }
+        })
+
+        Example code:
+
+            const http = require('http');
+            const fs = require('fs');
+
+            const server = http.createServer((req,res)=>{
+                console.log("Server!!");
+                fs.readFile('./abc.html', (err, data)=>{
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        res.write(data);
+                    }
+                    res.end();
+                })
+            });
+
+            server.listen(3000, 'localhost',()=>{
+                console.log("Listening on 3000");
+            });
+
+5. 
+    Full code well understood:
+
+        const http = require('http');
+        const fs = require('fs');
+
+        const server = http.createServer((req,res)=>{
+
+            let siteName = './abc.html';
+
+            switch(req.url){
+                case '/about':
+                    res.statusCode = 200;
+                    siteName = './about.html';
+                    break;
+                case '/about-me':
+                    res.statusCode = 301;
+                    res.setHeader('Location','/about');
+                    break;
+                case '/home':
+                    res.statusCode = 200;
+                    siteName = './abc.html';
+                    break;
+                default:
+                    res.statusCode = 404;
+                    siteName = './error.html';
+                    break;
+            }
+
+            console.log("Server!!");
+            fs.readFile(siteName, (err, data)=>{
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.write(data);
+                }
+                res.end();
+            })
+        });
+
+        server.listen(3000, 'localhost',()=>{
+            console.log("Listening on 3000");
+        });
+
+    
