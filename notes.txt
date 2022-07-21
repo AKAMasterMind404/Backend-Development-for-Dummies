@@ -116,4 +116,80 @@
             console.log("Listening on 3000");
         });
 
+    7. Redirection using express
+
+            app.get('/about', (req, res)=>{
+                res.sendFile('./about.html', {root: __dirname});
+            });
+
+            app.get('/about-me', (req, res)=>{
+                res.status(301).redirect('Location','/about');
+            });
+
+        ## app.use
+
+        Declared in the end after get methods
+        Acts as default route if url not matched With
+        any of the GET calls
+
+            app.use((req,res)=>{
+                res.sendFile('./error.html', {root: __dirname});
+            })
+
+        app.get VS app.use
+
+        get specificies the path url pattern
+        whereas use will work for any url pattern
+        pointing to your server
+
+8. 
+    In order to use JSON objects with express apps,
+    do: 
+
+        const app = express();
+        app.use(express.json());
+
+9. 
+    Queries and Parameters:
+    
+        app.get('/:param1', (req,res)=>{
+            console.log(req.params.param1)
+        })
+
+        Url passed:
+        '/users/?name=Atharv&age=21'
+
+        console.log(req.query) // Gives a dictionary containing key value Parameters
+        // Here: { "name":"Atharv", "age":21 }
+
+11. Routers and Mounting
+
+    Declare a route as follows:
+
+        const userRouter = express.Router();
+        app.use('/user', userRouter);
+
+        userRouter
+        .route('/')
+        .get(getUser)
+        .post(postUser)
+        .delete(deleteUser)
+        .patch(updateUser)
+
+        userRouter.route('/:id').get(getUserById);
+
+    What does this mean?
+    Whenever the server detects a url starting with '/user',
+    it will redirect the request to userRouter. The user Router
+    will check for the url pattern as well as request method and
+    trigger the appropriate function passed.
+
+    Note that the '/' in the user route denotes '/user/'
+
+    # req.body returning null?
+    -> Add the following:
+        
+        app.use(bodyParser.urlencoded({ extended: false }))
+        app.use(bodyParser.json())
+
     
